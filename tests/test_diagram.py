@@ -200,14 +200,13 @@ class ClusterTest(unittest.TestCase):
                 self.assertEqual(node1 - nodes, nodes)
                 self.assertEqual(node1 >> nodes, nodes)
                 self.assertEqual(node1 << nodes, nodes)
-
-    def test_invalid_node(self): 
+    def test_invalid_node(self):
         with Diagram(name=os.path.join(self.name, "invalid_node"), show=False): 
             with Cluster(): 
                 node1 = Node("node1") 
                 self.assertRaises(ValueError, lambda: node1.connect(2137, Edge(node1))) 
 
-    def test_invalid_edge(self): 
+    def test_invalid_edge(self):
         with Diagram(name=os.path.join(self.name, "invalid_edge"), show=False): 
             with Cluster(): 
                 node1 = Node("node1") 
