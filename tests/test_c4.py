@@ -2,6 +2,7 @@ import os
 import random
 import string
 import unittest
+from unittest.mock import patch
 
 from diagrams import Diagram
 from diagrams import setcluster, setdiagram
@@ -19,6 +20,7 @@ class C4Test(unittest.TestCase):
             os.remove(self.name + ".png")
         except FileNotFoundError:
             pass
+
 
     def test_nodes(self):
         with Diagram(name=self.name, show=False):

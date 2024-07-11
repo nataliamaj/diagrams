@@ -54,6 +54,12 @@ class DiagramTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 Diagram(outformat=fmt)
 
+    def test_global_context_lookup_error(self): 
+        self.assertIsNone(getdiagram()) 
+
+    def test_global(self): 
+        pass 
+
     def test_with_global_context(self):
         self.assertIsNone(getdiagram())
         with Diagram(name=os.path.join(self.name, "with_global_context"), show=False):
@@ -131,6 +137,9 @@ class ClusterTest(unittest.TestCase):
     def setUp(self):
         self.name = "cluster_test"
 
+    def test_context_not_up(self): 
+        self.assertRaises(EnvironmentError, lambda: Cluster()) 
+
     def tearDown(self):
         setdiagram(None)
         setcluster(None)
@@ -191,6 +200,21 @@ class ClusterTest(unittest.TestCase):
                 self.assertEqual(node1 - nodes, nodes)
                 self.assertEqual(node1 >> nodes, nodes)
                 self.assertEqual(node1 << nodes, nodes)
+
+    def test_invalid_node(self): 
+        with Diagram(name=os.path.join(self.name, "invalid_node"), show=False): 
+            with Cluster(): 
+                node1 = Node("node1") 
+                self.assertRaises(ValueError, lambda: node1.connect(2137, Edge(node1))) 
+
+    def test_invalid_edge(self): 
+        with Diagram(name=os.path.join(self.name, "invalid_edge"), show=False): 
+            with Cluster(): 
+                node1 = Node("node1") 
+                node2 = Node("node2") 
+                self.assertRaises(ValueError, lambda: node1.connect(node2, 2137)) 
+
+
 
     def test_nodes_to_node(self):
         with Diagram(name=os.path.join(self.name, "nodes_to_node"), show=False):

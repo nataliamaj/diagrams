@@ -12,7 +12,7 @@ from graphviz import Digraph
 # where context they are belong to. So the all clusters and nodes does
 # not need to specify the current diagrams or cluster via parameters.
 __diagram = contextvars.ContextVar("diagrams")
-__cluster = contextvars.ContextVar("cluster")
+__cluster = contextvars.ContextVar("cluster") 
 
 
 def getdiagram() -> "Diagram":
@@ -90,6 +90,8 @@ class Diagram:
         node_attr: Optional[dict] = None,
         edge_attr: Optional[dict] = None,
     ):
+        
+
         """Diagram represents a global diagrams context.
 
         :param name: Diagram name. It will be used for output filename if the
@@ -168,6 +170,24 @@ class Diagram:
 
     def _repr_png_(self):
         return self.dot.pipe(format="png")
+    
+    def add_node(self, node_id: str, label: str = "", **attrs) -> None: 
+        """Add a single node to the diagram.""" 
+        self.dot.node(node_id, label, **attrs) 
+
+    def add_edge(self, start_node: str, end_node: str, **attrs) -> None: 
+        """Add an edge between two nodes.""" 
+        self.dot.edge(start_node, end_node, **attrs) 
+
+    def add_nodes(self, nodes: List[Dict[str, str]]) -> None: 
+        """Add multiple nodes to the diagram.""" 
+        for node in nodes:
+            self.add_node(**node)
+
+    def add_edges(self, edges: List[Dict[str, str]]) -> None: 
+        """Add multiple edges to the diagram.""" 
+        for edge in edges: 
+            self.add_edge(**edge) 
 
     def _validate_direction(self, direction: str) -> bool:
         return direction.upper() in self.__directions
